@@ -104,14 +104,13 @@ runs:
     #     echo '### [:heavy_check_mark: :x: See Allure report of the test run :bar_chart::chart_with_upwards_trend::arrow_right:](https://telia-company.github.io/test-allure/${{ github.run_number }})' >> $GITHUB_STEP_SUMMARY
     - name: get-pages-info
       run: |
-        gh api repos/$GITHUB_REPOSITORY/pages
+        gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//'
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
       shell: bash
     - id: report-link
       run: |
-        PAGES_URL=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')
-        echo "::set-output name=report-url::$PAGES_URL${{ github.run_number }}"
+        echo "::set-output name=report-url::$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')${{ github.run_number }}"
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
       shell: bash
