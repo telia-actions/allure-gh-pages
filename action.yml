@@ -1,6 +1,9 @@
 name: 'Allure report to GH Pages'
 description: 'Publish Allure report with history to GitHub Pages'
 inputs:
+  gh-token:
+    description: 'GitHub Token to be used for deploying pages. Use for example \${{ secrets.GITHUB_TOKEN }} as the value.'
+    required: true
   gh-pages-branch:
     description: 'Branch to be used for GitHub Pages'
     required: true
@@ -13,7 +16,7 @@ outputs:
 runs:
   using: composite
   env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GH_TOKEN: ${{ inputs.gh-token }}
 
   steps:
     - name: Dump Env vars
