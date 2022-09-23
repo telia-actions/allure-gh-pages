@@ -110,7 +110,7 @@ runs:
       shell: bash
     - id: report-link
       run: |
-        PAGES_URL=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//)'
+        PAGES_URL=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')
         echo "::set-output name=report-url::$PAGES_URL${{ github.run_number }}"
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
