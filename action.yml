@@ -99,6 +99,12 @@ runs:
     # - name: Link to test report
     #   run: |
     #     echo '### [:heavy_check_mark: :x: See Allure report of the test run :bar_chart::chart_with_upwards_trend::arrow_right:](https://telia-company.github.io/test-allure/${{ github.run_number }})' >> $GITHUB_STEP_SUMMARY
+    - name: get-pages-info
+      run: |
+        gh api repos/$GITHUB_REPOSITORY/pages
+      shell: bash
     - id: report-link
-      run: echo "::set-output name=report-url::$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url)${{ github.run_number }}"
+      run: |
+        PAGES_URL=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url)
+        echo "::set-output name=report-url::$PAGES_URL/${{ github.run_number }}"
       shell: bash
