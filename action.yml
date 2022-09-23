@@ -15,9 +15,6 @@ outputs:
 
 runs:
   using: composite
-  env:
-    GH_TOKEN: ${{ inputs.gh-token }}
-
   steps:
     - name: Dump Env vars
       run: |
@@ -108,9 +105,13 @@ runs:
     - name: get-pages-info
       run: |
         gh api repos/$GITHUB_REPOSITORY/pages
+      env:
+        GH_TOKEN: ${{ inputs.gh-token }}
       shell: bash
     - id: report-link
       run: |
         PAGES_URL=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url)
         echo "::set-output name=report-url::$PAGES_URL/${{ github.run_number }}"
+      env:
+        GH_TOKEN: ${{ inputs.gh-token }}
       shell: bash
