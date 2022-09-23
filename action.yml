@@ -1,0 +1,103 @@
+name: 'Allure report to GH Pages'
+description: 'Publish Allure report with history to GitHub Pages'
+inputs:
+  gh-pages-branch:
+    description: 'Branch to be used for GitHub Pages'
+    required: true
+    default: 'gh-pages'
+outputs:
+  report-url:
+    description: "URL for Allure report"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+
+runs:
+  using: composite
+  steps:
+    - name: Dump Env vars
+      run: |
+        echo -e "\033[31;1;4mDump Env vars\033[0m"
+        env|sort
+        echo
+      shell: bash
+    - name: Dump runner context
+      env:
+        RUNNER_CONTEXT: ${{ toJson(runner) }}
+      run: |
+        echo -e "\033[31;1;4mDump runner context\033[0m"
+        echo -e "$RUNNER_CONTEXT\n"
+      shell: bash
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo -e "\033[31;1;4mDump GitHub context\033[0m"
+        echo -e "$GITHUB_CONTEXT\n"
+      shell: bash
+    - name: Dump job context
+      env:
+        JOB_CONTEXT: ${{ toJson(job) }}
+      run: |
+        echo -e "\033[31;1;4mDump job context\033[0m"
+        echo -e "$JOB_CONTEXT\n"
+      shell: bash
+    - name: Dump steps context
+      env:
+        STEPS_CONTEXT: ${{ toJson(steps) }}
+      run: |
+        echo -e "\033[31;1;4mDump steps context\033[0m"
+        echo -e "$STEPS_CONTEXT\n"
+      shell: bash
+    - name: Dump strategy context
+      env:
+        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+      run: |
+        echo -e "\033[31;1;4mDump strategy context\033[0m"
+        echo -e "$STRATEGY_CONTEXT\n"
+      shell: bash
+    - name: Dump matrix context
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      run: |
+        echo -e "\033[31;1;4mDump matrix context\033[0m"
+        echo -e "$MATRIX_CONTEXT\n"
+      shell: bash
+
+    - name: Get Allure history
+      uses: actions/checkout@v2
+      continue-on-error: true
+      with:
+        ref: ${{ inputs.gh-pages-branch }}
+        path: gh-pages
+
+    # - uses: actions/download-artifact@v2
+    #   with:
+    #     name: allure-results
+    #     path: allure-results
+
+    # Just to see what we currently have in our workspace
+    - name: List all files
+      if: always()
+      run: ls -laR
+
+    # - name: Allure Report Generation
+    #   uses: telia-actions/simple-elf-allure-report@v1
+    #   with:
+    #     allure_results: allure-results
+    #     #gh_pages: gh-pages
+    #     #allure_report: allure-report
+    #     allure_history: allure-history
+    #     keep_reports: 5
+
+    # - name: Deploy report to Github Pages
+    #   uses: telia-actions/peaceiris-gh-pages@v3
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     # publish_branch: gh-pages
+    #     publish_dir: ./allure-history
+
+    # - name: Link to test report
+    #   run: |
+    #     echo '### [:heavy_check_mark: :x: See Allure report of the test run :bar_chart::chart_with_upwards_trend::arrow_right:](https://telia-company.github.io/test-allure/${{ github.run_number }})' >> $GITHUB_STEP_SUMMARY
+    - id: report-link
+      run: echo "::set-output name=report-url::https://telia-company.github.io/test-allure/${{ github.run_number }}"
+      shell: bash
