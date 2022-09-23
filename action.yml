@@ -78,6 +78,7 @@ runs:
     - name: List all files
       if: always()
       run: ls -laR
+      shell: bash
 
     # - name: Allure Report Generation
     #   uses: telia-actions/simple-elf-allure-report@v1
