@@ -5,13 +5,13 @@ inputs:
     description: 'Path to directory having Allure results'
     required: true
     default: 'allure-results'
-  gh-token:
-    description: 'GitHub Token to be used for deploying pages. Use for example secrets.GITHUB_TOKEN as the value.'
-    required: true
   gh-pages-branch:
     description: 'Branch to be used for GitHub Pages'
     required: true
     default: 'gh-pages'
+  gh-token:
+    description: 'GitHub Token to be used for deploying pages. Use for example secrets.GITHUB_TOKEN as the value.'
+    required: true
 outputs:
   report-url:
     description: "URL for Allure report"
@@ -20,72 +20,12 @@ outputs:
 runs:
   using: composite
   steps:
-    # - name: Dump Env vars
-    #   run: |
-    #     echo -e "\033[31;1;4mDump Env vars\033[0m"
-    #     env|sort
-    #     echo
-    #   shell: bash
-    # - name: Dump runner context
-    #   env:
-    #     RUNNER_CONTEXT: ${{ toJson(runner) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump runner context\033[0m"
-    #     echo -e "$RUNNER_CONTEXT\n"
-    #   shell: bash
-    # - name: Dump GitHub context
-    #   env:
-    #     GITHUB_CONTEXT: ${{ toJson(github) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump GitHub context\033[0m"
-    #     echo -e "$GITHUB_CONTEXT\n"
-    #   shell: bash
-    # - name: Dump job context
-    #   env:
-    #     JOB_CONTEXT: ${{ toJson(job) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump job context\033[0m"
-    #     echo -e "$JOB_CONTEXT\n"
-    #   shell: bash
-    # - name: Dump steps context
-    #   env:
-    #     STEPS_CONTEXT: ${{ toJson(steps) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump steps context\033[0m"
-    #     echo -e "$STEPS_CONTEXT\n"
-    #   shell: bash
-    # - name: Dump strategy context
-    #   env:
-    #     STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump strategy context\033[0m"
-    #     echo -e "$STRATEGY_CONTEXT\n"
-    #   shell: bash
-    # - name: Dump matrix context
-    #   env:
-    #     MATRIX_CONTEXT: ${{ toJson(matrix) }}
-    #   run: |
-    #     echo -e "\033[31;1;4mDump matrix context\033[0m"
-    #     echo -e "$MATRIX_CONTEXT\n"
-    #   shell: bash
-
     - name: Get Allure history
       uses: actions/checkout@v2
       continue-on-error: true
       with:
         ref: ${{ inputs.gh-pages-branch }}
         path: gh-pages
-
-    # - uses: actions/download-artifact@v2
-    #   with:
-    #     name: allure-results
-    #     path: allure-results
-
-    # Just to see what we currently have in our workspace
-    - name: List all files
-      if: always()
-      run: ls -laR
-      shell: bash
 
     - name: Allure Report Generation
       uses: telia-actions/simple-elf-allure-report@v1
@@ -103,9 +43,6 @@ runs:
         publish_branch: ${{ inputs.gh-pages-branch }}
         publish_dir: ./allure-history
 
-    # - name: Link to test report
-    #   run: |
-    #     echo '### [:heavy_check_mark: :x: See Allure report of the test run :bar_chart::chart_with_upwards_trend::arrow_right:](https://telia-company.github.io/test-allure/${{ github.run_number }})' >> $GITHUB_STEP_SUMMARY
     - id: report-link
       run: |
         echo "::set-output name=report-url::$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')${{ github.run_number }}"
