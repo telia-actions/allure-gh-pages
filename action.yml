@@ -12,6 +12,10 @@ inputs:
   gh-token:
     description: 'GitHub Token to be used for deploying pages. Use for example secrets.GITHUB_TOKEN as the value.'
     required: true
+  test-env-name:
+    description: 'Name of the test environment. Will be stored to the report.'
+    required: false
+    default: ''
 outputs:
   report-url:
     description: "URL for Allure report"
@@ -35,6 +39,7 @@ runs:
         #allure_report: allure-report
         allure_history: allure-history
         keep_reports: 5
+        test_env_name: ${{ inputs.test-env-name }}
 
     - name: Deploy report to Github Pages
       uses: telia-actions/peaceiris-gh-pages@v3
