@@ -25,11 +25,11 @@ inputs:
     required: false
     default: ''
   docker-username:
-    description: 'Username to login to Telia's Docker Hub remote cache registry '
+    description: 'Username to login to Docker Hub remote cache registry in Telia JFrog Artifactory'
     required: true
     default: ''
   docker-password:
-    description: 'Password to login to Telia's Docker Hub remote cache registry '
+    description: 'Password to login to Docker Hub remote cache registry in Telia JFrog Artifactory'
     required: true
     default: ''
 outputs:
