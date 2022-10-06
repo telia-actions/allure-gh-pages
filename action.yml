@@ -24,6 +24,14 @@ inputs:
     description: 'Name of the test environment. Will be stored to the report.'
     required: false
     default: ''
+  docker-username:
+    description: 'Username to login to Telia's Docker Hub remote cache registry '
+    required: true
+    default: ''
+  docker-password:
+    description: 'Password to login to Telia's Docker Hub remote cache registry '
+    required: true
+    default: ''
 outputs:
   report-url:
     description: "URL for Allure report"
@@ -44,8 +52,8 @@ runs:
       uses: docker/login-action@v1
       with:
         registry: common-dockerhub-remote.jfrog.teliacompany.io
-        username: ${{ secrets.ARTIFACTORY_READER_USERNAME }}
-        password: ${{ secrets.ARTIFACTORY_READER_PASSWORD }}
+        username: ${{ inputs.docker-username }}
+        password: ${{ inputs.docker-password }}
 
     - name: Allure Report Generation
       uses: telia-actions/simple-elf-allure-report@v1-telia
