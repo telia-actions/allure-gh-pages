@@ -33,7 +33,7 @@ runs:
   using: composite
   steps:
     - name: Get Allure history
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       continue-on-error: true
       with:
         ref: ${{ inputs.gh-pages-branch }}
@@ -51,7 +51,7 @@ runs:
         test_env_name: ${{ inputs.test-env-name }}
 
     - name: Deploy report to Github Pages
-      uses: telia-actions/peaceiris-gh-pages@v3
+      uses: telia-actions/peaceiris-gh-pages@v4
       with:
         github_token: ${{ inputs.gh-token }}
         publish_branch: ${{ inputs.gh-pages-branch }}
