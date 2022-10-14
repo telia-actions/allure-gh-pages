@@ -51,7 +51,7 @@ runs:
         test_env_name: ${{ inputs.test-env-name }}
 
     - name: Deploy report to Github Pages
-      uses: telia-actions/peaceiris-gh-pages@v4
+      uses: telia-actions/peaceiris-gh-pages@v4.1.0-pre
       with:
         github_token: ${{ inputs.gh-token }}
         publish_branch: ${{ inputs.gh-pages-branch }}
