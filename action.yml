@@ -60,7 +60,7 @@ runs:
     - id: report-link
       run: |
         if [[ '${{ inputs.subfolder }}' != '' ]]; then export URL_SUBFOLDER=${{ inputs.subfolder }}/; fi
-        echo "::set-output name=report-url::$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')${URL_SUBFOLDER}${{ github.run_number }}/"
+        echo "report-url=$(gh api repos/$GITHUB_REPOSITORY/pages | jq .html_url | sed -e 's/^"//' -e 's/"$//')${URL_SUBFOLDER}${{ github.run_number }}/" >> $GITHUB_OUTPUT
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
       shell: bash
