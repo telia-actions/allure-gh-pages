@@ -52,7 +52,7 @@ Default: ''
 
 ---
 ## Action output
-The action has an output, which can be used later in the workflow. The output is the GitHub Pages URL of the Allure report.
+A GitHub Action may have one or many outputs, which can be used later in the workflow. This action has currently one output, `report-url`, which contains the GitHub Pages URL of the Allure report.
 
 ---
 ## Example usage in a workflow
